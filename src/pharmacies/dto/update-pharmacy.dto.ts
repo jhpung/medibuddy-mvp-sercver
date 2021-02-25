@@ -1,16 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdatePharmacyDto {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   name?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   phone?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   fax?: string;
 
   @ApiProperty({
+    required: false,
     type: 'array',
     items: {
       type: 'number',

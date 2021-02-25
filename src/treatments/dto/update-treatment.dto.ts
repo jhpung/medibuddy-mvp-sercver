@@ -1,36 +1,36 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateTreatmentDto {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   name?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   isFirst?: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   phone?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   residentRegistrationNumber?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   age?: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   symptom?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   patientRequest?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   price?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   status?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   pharmacy: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   prescription?: string;
 }
