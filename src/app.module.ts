@@ -14,7 +14,9 @@ import { Treatment } from './models/entities/treatment.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: ['.env.development'] }),
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development', '.env.production'],
+    }),
     MulterModule.register({
       dest: './uploads',
     }),
