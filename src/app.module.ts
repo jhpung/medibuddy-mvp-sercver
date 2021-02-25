@@ -7,12 +7,10 @@ import { MedicinesModule } from './medicines/medicines.module';
 import { PharmaciesModule } from './pharmacies/pharmacies.module';
 import { TreatmentsModule } from './treatments/treatments.module';
 import { AdminModule } from './admin/admin.module';
-import { PrescriptionsModule } from './prescriptions/prescriptions.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { Pharmacy } from './entities/pharmacy.entity';
-import { Medicine } from './entities/medicine.entity';
-import { Prescription } from './entities/prescription.entity';
-import { Treatment } from './entities/treatment.entity';
+import { Pharmacy } from './models/entities/pharmacy.entity';
+import { Medicine } from './models/entities/medicine.entity';
+import { Treatment } from './models/entities/treatment.entity';
 
 @Module({
   imports: [
@@ -30,15 +28,14 @@ import { Treatment } from './entities/treatment.entity';
         username: configService.get<string>('DB_USER'),
         password: configService.get<string>('DB_PASS'),
         database: configService.get<string>('DB_NAME'),
-        entities: [Pharmacy, Medicine, Prescription, Treatment],
-        synchronize: true,
+        entities: [Pharmacy, Medicine, Treatment],
+        synchronize: configService.get<boolean>('DB_SYNC'),
       }),
     }),
     MedicinesModule,
     PharmaciesModule,
     TreatmentsModule,
     AdminModule,
-    PrescriptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

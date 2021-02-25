@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
-import { Medicine } from '../entities/medicine.entity';
-import { MedicineRepository } from '../repositories/medicine.repository';
+import { Medicine } from '../models/entities/medicine.entity';
+import { MedicineRepository } from '../models/repositories/medicine.repository';
 import { MedicinesModule } from './medicines.module';
 import { MedicinesService } from './medicines.service';
 

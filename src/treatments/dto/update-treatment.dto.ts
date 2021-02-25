@@ -2,9 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateTreatmentDto {
   @ApiProperty()
-  id: number;
-
-  @ApiProperty()
   name?: string;
 
   @ApiProperty()
@@ -35,5 +32,5 @@ export class UpdateTreatmentDto {
   pharmacy: number;
 
   @ApiProperty()
-  prescription?: number;
+  prescription?: string;
 }

@@ -2,9 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdatePharmacyDto {
   @ApiProperty()
-  id: number;
-
-  @ApiProperty()
   name?: string;
 
   @ApiProperty()
@@ -13,6 +10,11 @@ export class UpdatePharmacyDto {
   @ApiProperty()
   fax?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'number',
+    },
+  })
   medicines: number[];
 }

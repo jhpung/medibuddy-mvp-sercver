@@ -2,14 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Pharmacy } from './pharmacy.entity';
-import { Prescription } from './prescription.entity';
 
 @Entity()
 export class Treatment {
@@ -46,6 +43,9 @@ export class Treatment {
   @Column({ nullable: true })
   price: string;
 
+  @Column({ nullable: true })
+  prescription: string;
+
   @CreateDateColumn()
   created: Date;
 
@@ -55,11 +55,4 @@ export class Treatment {
   constructor(treatment: Partial<Treatment>) {
     Object.assign(this, treatment);
   }
-
-  @OneToOne((type) => Prescription, (prescription) => prescription.id, {
-    nullable: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  prescription: Prescription;
 }

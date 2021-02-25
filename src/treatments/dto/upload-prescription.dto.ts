@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreatePrescriptionDto {
-  @ApiProperty()
-  treatment: number;
-
+export class UploadPrescriptionDto {
   @ApiProperty({ type: 'string', format: 'binary' })
   file: any;
 }
