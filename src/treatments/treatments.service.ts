@@ -12,7 +12,7 @@ export class TreatmentsService {
   constructor(
     private treatmentsRepository: TreatmentRepository,
 
-    private pharmaciesRepository: PharmacyRepository,
+    private pharmacyRepository: PharmacyRepository,
   ) {}
 
   async get(id: number): Promise<Treatment> {
@@ -37,7 +37,7 @@ export class TreatmentsService {
   }
 
   async create(createTreatmentDto: CreateTreatmentDto): Promise<Treatment> {
-    const pharmacy: Pharmacy = await this.pharmaciesRepository.findOne(
+    const pharmacy: Pharmacy = await this.pharmacyRepository.findOne(
       createTreatmentDto.pharmacy,
       { relations: ['medicines'] },
     );
@@ -52,13 +52,13 @@ export class TreatmentsService {
   async update(
     id: number,
     updateTreatmentDto: UpdateTreatmentDto,
-  ): Promise<any> {
+  ): Promise<Treatment> {
     let pharmacy = null;
     const treatment = await this.treatmentsRepository.findOne(id);
     if (!treatment)
       throw await new NotFoundException('존재하지 않는 진료요청입니다.');
     if (updateTreatmentDto.pharmacy) {
-      pharmacy = await this.pharmaciesRepository.findOne(
+      pharmacy = await this.pharmacyRepository.findOne(
         updateTreatmentDto.pharmacy,
         { relations: ['medicines'] },
       );
@@ -89,5 +89,13 @@ export class TreatmentsService {
     }
     treatment.prescription = file.path;
     return await this.treatmentsRepository.save(treatment);
+  }
+
+  async deleteById(id: number) {
+    return await this.treatmentsRepository.delete(id);
+  }
+
+  async deleteAll() {
+    return await this.treatmentsRepository.delete({});
   }
 }

@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreatePharmacyDto } from './dto/create-pharmacy.dto';
@@ -73,5 +82,15 @@ export class PharmaciesController {
     @Body() updatePharmacyDto: UpdatePharmacyDto,
   ) {
     return await this.pharmaciesService.update(id, updatePharmacyDto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return await this.pharmaciesService.deleteById(id);
+  }
+
+  @Delete()
+  async deleteAll() {
+    return await this.pharmaciesService.deleteAll();
   }
 }

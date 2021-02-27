@@ -1,16 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Repository } from 'typeorm';
-import { Medicine } from '../models/entities/medicine.entity';
 import { MedicineRepository } from '../models/repositories/medicine.repository';
-import { MedicinesModule } from './medicines.module';
 import { MedicinesService } from './medicines.service';
 
 describe('MedicinesService', () => {
   let service: MedicinesService;
-
+  let medicineRepository: MedicineRepository;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [MedicinesModule],
       providers: [
         MedicinesService,
         { provide: 'MedicineRepository', useClass: MedicineRepository },
@@ -18,9 +14,11 @@ describe('MedicinesService', () => {
     }).compile();
 
     service = module.get<MedicinesService>(MedicinesService);
+    medicineRepository = module.get<MedicineRepository>(MedicineRepository);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(medicineRepository).toBeDefined();
   });
 });

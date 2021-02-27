@@ -53,4 +53,12 @@ export class PharmaciesService {
       medicines: newMedicines,
     });
   }
+
+  async deleteById(id: number) {
+    return await this.pharmaciesRepository.delete(id);
+  }
+
+  async deleteAll() {
+    return await this.pharmaciesRepository.delete({});
+  }
 }

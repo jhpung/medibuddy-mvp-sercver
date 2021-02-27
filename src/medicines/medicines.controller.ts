@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { MedicinesService } from './medicines.service';
@@ -63,5 +71,15 @@ export class MedicinesController {
   @ApiResponse({ status: 409, description: '이미 존재하는 의약품 이름일 경우' })
   async create(@Body() createMedicineDto: CreateMedicineDto) {
     return await this.medicinesService.create(createMedicineDto);
+  }
+
+  @Delete(':id')
+  async deleteById(@Param('id') id: number) {
+    return await this.medicinesService.deleteById(id);
+  }
+
+  @Delete()
+  async deleteAll() {
+    return await this.medicinesService.deleteAll();
   }
 }

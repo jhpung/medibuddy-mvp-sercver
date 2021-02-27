@@ -39,4 +39,12 @@ export class MedicinesService {
     }
     return await this.medicineRepository.save(createMedicineDto);
   }
+
+  async deleteById(id: number) {
+    return await this.medicineRepository.delete(id);
+  }
+
+  async deleteAll() {
+    return await this.medicineRepository.delete({});
+  }
 }

@@ -1,8 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  Header,
   Param,
   Post,
   Put,
@@ -14,8 +14,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBody,
   ApiConsumes,
-  ApiHeader,
-  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -121,5 +119,15 @@ export class TreatmentsController {
       uploadPrescriptionDto,
       id,
     );
+  }
+
+  @Delete('id')
+  async deleteById(@Param('id') id: number) {
+    return await this.treatmentsService.deleteById(id);
+  }
+
+  @Delete()
+  async deleteAll() {
+    return await this.treatmentsService.deleteAll();
   }
 }

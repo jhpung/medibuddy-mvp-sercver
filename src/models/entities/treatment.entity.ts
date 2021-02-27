@@ -31,9 +31,6 @@ export class Treatment {
   @Column()
   symptom: string;
 
-  @ManyToOne(() => Pharmacy, (pharmacy) => pharmacy.id)
-  pharmacy: Pharmacy;
-
   @Column()
   status: string;
 
@@ -51,6 +48,9 @@ export class Treatment {
 
   @UpdateDateColumn()
   updated: Date;
+
+  @ManyToOne(() => Pharmacy, (pharmacy) => pharmacy.id)
+  pharmacy: Pharmacy;
 
   constructor(treatment: Partial<Treatment>) {
     Object.assign(this, treatment);
