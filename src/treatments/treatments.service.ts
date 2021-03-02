@@ -16,7 +16,9 @@ export class TreatmentsService {
   ) {}
 
   async get(id: number): Promise<Treatment> {
-    const treatment = await this.treatmentsRepository.findOne(id);
+    const treatment = await this.treatmentsRepository.findOne(id, {
+      relations: ['pharmacy', 'pharmacy.medicines'],
+    });
     if (!treatment) {
       throw new NotFoundException('알 수 없는 진료 요청입니다.');
     }
@@ -33,6 +35,7 @@ export class TreatmentsService {
       skip: page,
       take: count,
       order: { [orderBy]: method },
+      relations: ['pharmacy', 'pharmacy.medicines'],
     });
   }
 
