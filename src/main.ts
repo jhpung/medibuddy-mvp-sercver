@@ -3,7 +3,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: { origin: '*', methods: 'GET,HEAD,PUT,PATCH,POST,DELETE' },
+  });
   const config = new DocumentBuilder()
     .setTitle('메디버디 MVP 프로젝트 1')
     .setDescription('병원 진료 프로세스 MVP')
