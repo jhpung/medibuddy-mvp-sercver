@@ -6,17 +6,18 @@ import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 import { TreatmentRepository } from '../models/repositories/treatment.repository';
 import { PharmacyRepository } from '../models/repositories/pharmacy.repository';
 import { UploadPrescriptionDto } from './dto/upload-prescription.dto';
+import { Response } from 'express';
 
 @Injectable()
 export class TreatmentsService {
   constructor(
-    private treatmentsRepository: TreatmentRepository,
+    private treatmentRepository: TreatmentRepository,
 
     private pharmacyRepository: PharmacyRepository,
   ) {}
 
   async get(id: number): Promise<Treatment> {
-    const treatment = await this.treatmentsRepository.findOne(id, {
+    const treatment = await this.treatmentRepository.findOne(id, {
       relations: ['pharmacy', 'pharmacy.medicines'],
     });
     if (!treatment) {
@@ -31,7 +32,7 @@ export class TreatmentsService {
     orderBy: string,
     method: 'ASC' | 'DESC',
   ): Promise<Treatment[]> {
-    return await this.treatmentsRepository.find({
+    return await this.treatmentRepository.find({
       skip: page,
       take: count,
       order: { [orderBy]: method },
@@ -44,7 +45,7 @@ export class TreatmentsService {
       createTreatmentDto.pharmacy,
       { relations: ['medicines'] },
     );
-    return this.treatmentsRepository.save(
+    return this.treatmentRepository.save(
       new Treatment({
         ...createTreatmentDto,
         pharmacy: pharmacy,
@@ -57,7 +58,7 @@ export class TreatmentsService {
     updateTreatmentDto: UpdateTreatmentDto,
   ): Promise<Treatment> {
     let pharmacy = null;
-    const treatment = await this.treatmentsRepository.findOne(id);
+    const treatment = await this.treatmentRepository.findOne(id);
     if (!treatment)
       throw await new NotFoundException('존재하지 않는 진료요청입니다.');
     if (updateTreatmentDto.pharmacy) {
@@ -77,7 +78,7 @@ export class TreatmentsService {
 
     Object.assign(treatment, updateTreatmentDto);
     return {
-      ...(await this.treatmentsRepository.save(newTreatment)),
+      ...(await this.treatmentRepository.save(newTreatment)),
     };
   }
 
@@ -86,19 +87,26 @@ export class TreatmentsService {
     uploadPrescriptionDto: UploadPrescriptionDto,
     id: number,
   ) {
-    const treatment = await this.treatmentsRepository.findOne(id);
+    const treatment = await this.treatmentRepository.findOne(id);
     if (!treatment) {
       throw await new NotFoundException('알 수 없는 진료기록입니다.');
     }
+
     treatment.prescription = file.path;
-    return await this.treatmentsRepository.save(treatment);
+    return await this.treatmentRepository.save(treatment);
   }
 
   async deleteById(id: number) {
-    return await this.treatmentsRepository.delete(id);
+    return await this.treatmentRepository.delete(id);
   }
 
   async deleteAll() {
-    return await this.treatmentsRepository.delete({});
+    return await this.treatmentRepository.delete({});
+  }
+
+  async getPrescription(res: Response, id: number) {
+    const treatment = await this.treatmentRepository.findOne(id);
+    if (!treatment) throw await new NotFoundException();
+    return res.download(treatment.prescription);
   }
 }

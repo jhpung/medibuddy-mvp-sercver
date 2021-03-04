@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
 import { UpdateTreatmentDto } from './dto/update-treatment.dto';
@@ -114,6 +116,7 @@ export class TreatmentsController {
     @Body() uploadPrescriptionDto: UploadPrescriptionDto,
     @Param('id') id: number,
   ) {
+    console.log(file);
     return await this.treatmentsService.uploadPrescription(
       file,
       uploadPrescriptionDto,
@@ -129,5 +132,10 @@ export class TreatmentsController {
   @Delete()
   async deleteAll() {
     return await this.treatmentsService.deleteAll();
+  }
+
+  @Get(':id/prescription')
+  async getPrescription(@Res() res: Response, @Param('id') id: number) {
+    return await this.treatmentsService.getPrescription(res, id);
   }
 }
