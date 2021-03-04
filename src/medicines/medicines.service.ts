@@ -6,10 +6,14 @@ import {
 import { Like } from 'typeorm';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { MedicineRepository } from '../models/repositories/medicine.repository';
+import { PharmacyRepository } from '../models/repositories/pharmacy.repository';
 
 @Injectable()
 export class MedicinesService {
-  constructor(private medicineRepository: MedicineRepository) {}
+  constructor(
+    private medicineRepository: MedicineRepository,
+    private pharmacyRepository: PharmacyRepository,
+  ) {}
 
   async getMedicine(id: number) {
     return await this.medicineRepository.findOneOrFail(id).catch(() => {
@@ -31,13 +35,13 @@ export class MedicinesService {
   }
 
   async create(createMedicineDto: CreateMedicineDto) {
-    const medicine = await this.medicineRepository.findOne({
-      name: createMedicineDto.name,
-    });
-    if (medicine) {
-      throw await new ConflictException('이미 존재하는 의약품입니다.');
-    }
-    return await this.medicineRepository.save(createMedicineDto);
+    const pharmacy = await this.pharmacyRepository.findOne(
+      createMedicineDto.pharmacy,
+    );
+    if (!pharmacy) throw await new NotFoundException();
+    return await this.medicineRepository.save(
+      Object.assign(createMedicineDto, { pharmacy }),
+    );
   }
 
   async deleteById(id: number) {

@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Medicine } from './medicine.entity';
 import { Treatment } from './treatment.entity';
 
@@ -23,13 +16,10 @@ export class Pharmacy {
   @Column()
   fax: string;
 
-  @JoinTable()
-  @ManyToMany(() => Medicine, (medicine) => medicine.id, {
-    cascade: true,
-  })
+  @OneToMany(() => Medicine, (medicine) => medicine.pharmacy)
   medicines: Medicine[];
 
-  @OneToMany(() => Treatment, (treatment) => treatment.id)
+  @OneToMany(() => Treatment, (treatment) => treatment.pharmacy)
   treatments: Treatment[];
 
   constructor(pharmacy: Partial<Pharmacy>) {

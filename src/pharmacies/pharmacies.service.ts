@@ -14,9 +14,11 @@ export class PharmaciesService {
   ) {}
 
   async get(id: number) {
-    return await this.pharmaciesRepository.findOneOrFail(id).catch(() => {
-      throw new NotFoundException('알 수 없는 약국 번호입니다.');
+    const pharmacy = await this.pharmaciesRepository.findOne(id, {
+      relations: ['medicines'],
     });
+    if (!pharmacy) throw await new NotFoundException();
+    return pharmacy;
   }
 
   async getPharmacies(
@@ -29,12 +31,14 @@ export class PharmaciesService {
       take: count,
       skip: page,
       order: { [order]: method },
+      relations: ['medicines'],
     });
   }
 
   async create(createPharmacyDto: CreatePharmacyDto) {
     return await this.pharmaciesRepository.save(createPharmacyDto);
   }
+
   async update(id: number, updatePharmacyDto: UpdatePharmacyDto) {
     let currentObject = await this.pharmaciesRepository.findOne(id);
     if (!currentObject) {

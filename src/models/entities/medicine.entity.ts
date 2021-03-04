@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeepPartial,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Pharmacy } from './pharmacy.entity';
 
 @Entity()
@@ -6,13 +13,17 @@ export class Medicine {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ nullable: true })
   name: string;
 
-  @ManyToMany(() => Pharmacy, (pharmacy) => pharmacy.id)
-  pharmacies: Pharmacy[];
+  @Column({ nullable: true })
+  ingredients: string;
 
-  constructor(medicine: Partial<Medicine>) {
+  @ManyToOne(() => Pharmacy, (pharmacy) => pharmacy.id)
+  @JoinColumn()
+  pharmacy: Pharmacy;
+
+  constructor(medicine: DeepPartial<Medicine>) {
     Object.assign(this, medicine);
   }
 }
