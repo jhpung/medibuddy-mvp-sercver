@@ -36,7 +36,7 @@ export class TreatmentsService {
     return await this.treatmentRepository.find({
       skip: page,
       take: count,
-      order: { updated: 'ASC', [orderBy]: method },
+      order: { created: 'ASC', [orderBy]: method },
       where: { status: In(['진료대기', '진료비청구']) },
       relations: ['pharmacy', 'pharmacy.medicines'],
     });
