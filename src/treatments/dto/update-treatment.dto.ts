@@ -5,6 +5,9 @@ export class UpdateTreatmentDto {
   name?: string;
 
   @ApiProperty({ required: false })
+  isViewed?: boolean;
+
+  @ApiProperty({ required: false })
   isFirst?: boolean;
 
   @ApiProperty({ required: false })

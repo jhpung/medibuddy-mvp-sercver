@@ -16,6 +16,9 @@ export class Treatment {
   @Column()
   name: string;
 
+  @Column({ default: false })
+  isViewed: boolean;
+
   @Column()
   isFirst: boolean;
 

@@ -7,6 +7,7 @@ import { TreatmentRepository } from '../models/repositories/treatment.repository
 import { PharmacyRepository } from '../models/repositories/pharmacy.repository';
 import { UploadPrescriptionDto } from './dto/upload-prescription.dto';
 import { Response } from 'express';
+import { In, Like } from 'typeorm';
 
 @Injectable()
 export class TreatmentsService {
@@ -35,7 +36,8 @@ export class TreatmentsService {
     return await this.treatmentRepository.find({
       skip: page,
       take: count,
-      order: { [orderBy]: method },
+      order: { updated: 'ASC', [orderBy]: method },
+      where: { status: In(['진료대기', '진료비청구']) },
       relations: ['pharmacy', 'pharmacy.medicines'],
     });
   }
@@ -59,6 +61,8 @@ export class TreatmentsService {
   ): Promise<Treatment> {
     let pharmacy = null;
     const treatment = await this.treatmentRepository.findOne(id);
+    console.log(updateTreatmentDto);
+
     if (!treatment)
       throw await new NotFoundException('존재하지 않는 진료요청입니다.');
     if (updateTreatmentDto.pharmacy) {
@@ -73,13 +77,15 @@ export class TreatmentsService {
     const newTreatment = {
       ...treatment,
       ...updateTreatmentDto,
-      pharmacy: pharmacy ? pharmacy : treatment.pharmacy,
+      pharmacy: pharmacy ?? treatment.pharmacy,
     };
 
-    Object.assign(treatment, updateTreatmentDto);
-    return {
-      ...(await this.treatmentRepository.save(newTreatment)),
-    };
+    Object.assign(treatment, updateTreatmentDto, {
+      pharmacy: pharmacy ?? treatment.pharmacy,
+    });
+    const result = await this.treatmentRepository.save(treatment);
+    console.log(result);
+    return result;
   }
 
   async uploadPrescription(
@@ -93,6 +99,7 @@ export class TreatmentsService {
     }
 
     treatment.prescription = file.path;
+    treatment.status = '진료완료';
     return await this.treatmentRepository.save(treatment);
   }
 
