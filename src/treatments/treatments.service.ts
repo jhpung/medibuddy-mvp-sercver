@@ -37,7 +37,6 @@ export class TreatmentsService {
       skip: page,
       take: count,
       order: { created: 'ASC', [orderBy]: method },
-      where: { status: In(['진료대기', '진료비청구']) },
       relations: ['pharmacy', 'pharmacy.medicines'],
     });
   }
